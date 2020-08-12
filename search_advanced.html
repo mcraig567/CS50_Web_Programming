@@ -3,17 +3,54 @@
     <head>
         <title>Advanced Search</title>
         <style>
-            .label, .input {
+
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .row {
+                display: flex;
+                flex-direction: row;
+                margin: 3px;
+
+            }
+
+            
+            /* .label, .input {
                 display: inline-block;
                 vertical-align :middle;
                 margin: 3px;
-            }
+            } */
+            
 
             .label {
-                text-align: left;
                 width: 180px;
             }
 
+            .input {
+                width: 300px;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            input[type="text"] {
+                width: 296px;
+                padding: 0;
+            }
+
+            .top {
+                font-size: 18px;
+                height: 30px;
+                margin: 0;
+            }
+
+            .button {
+                background-color: #4D90FE;
+                padding: 0px 12px;
+                border: 1px solid #3079ed;
+                color: white;
+            }
             .nav {
                 overflow: hidden;
             }
@@ -24,6 +61,9 @@
 
             .link {
                 text-decoration: none;
+                color: black;
+                font-family: sans-serif;
+                font-size: 10pt;
             }
 
             .nav a:hover {
@@ -65,9 +105,9 @@
                     <div class="input"><input type="text" name="as_eq"></div>
                 </div>
 
-                <div>
+                <div class="row">
                     <div class="label"></div>
-                    <div class="input"><input class="button" type="submit" value="Google Search"></div>
+                    <div class="input"><input class="button" type="submit" value="Advanced Search"></div>
                 </div>
             </form>
         </div>
