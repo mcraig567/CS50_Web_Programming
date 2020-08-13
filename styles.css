@@ -81,7 +81,7 @@ form {
     vertical-align: middle;
 }
 
-.nav a:hover {
+.nav a:hover, .adv-nav a:hover {
     text-decoration: underline;
 }
 
