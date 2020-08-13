@@ -2,39 +2,7 @@
 <html lang="en">
     <head>
         <title>Search</title>
-        <style>
-            .nav {
-                overflow: hidden;
-            }
-
-            .nav-right {
-                float: right;
-            }
-
-            .link {
-                text-decoration: none;
-                color: black;
-                margin: 5px;
-                font-family: sans-serif;
-                font-size: 10pt;
-            }
-
-            .nav a:hover {
-                text-decoration: underline;
-            }
-
-            .main {
-                text-align: center;
-            }
-
-            .button{
-                border-radius: 50px;
-                border-color: darkgray;
-                border-width: 1px;
-                width: 33%;
-                margin: 10px;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
         <div class="nav">
@@ -43,14 +11,17 @@
                 <a class="link" href="advanced.html">Advanced</a>
             </div>
         </div>
+        <div class="main-image">
+            <img class="main-image" src="cat.jpg" alt="Placeholder">
+        </div>
         <div class="main">
             <form action="https://google.com/search">
                 <div>
-                    <input class="button" type="text" name="q" placeholder="&#x1F50D;">
+                    <input class="big-button" type="text" name="q" placeholder="&#x1F50D;">
                 </div>
                 <div>
-                    <input type="submit" value="Google Search">
-                    <input type="submit" value="I'm Feeling Lucky" name="btnI">
+                    <input class="main-button" type="submit" value="Google Search">
+                    <input class="main-button" type="submit" value="I'm Feeling Lucky" name="btnI">
                 </div>
             </form>
         </div>

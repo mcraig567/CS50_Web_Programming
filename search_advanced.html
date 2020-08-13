@@ -2,107 +2,39 @@
 <html lang="en">
     <head>
         <title>Advanced Search</title>
-        <style>
-
-            form {
-                display: flex;
-                flex-direction: column;
-            }
-
-            .row {
-                display: flex;
-                flex-direction: row;
-                margin: 3px;
-
-            }
-
-            
-            /* .label, .input {
-                display: inline-block;
-                vertical-align :middle;
-                margin: 3px;
-            } */
-            
-
-            .label {
-                width: 180px;
-            }
-
-            .input {
-                width: 300px;
-                display: flex;
-                justify-content: flex-end;
-            }
-
-            input[type="text"] {
-                width: 296px;
-                padding: 0;
-            }
-
-            .top {
-                font-size: 18px;
-                height: 30px;
-                margin: 0;
-            }
-
-            .button {
-                background-color: #4D90FE;
-                padding: 0px 12px;
-                border: 1px solid #3079ed;
-                color: white;
-            }
-            .nav {
-                overflow: hidden;
-            }
-
-            .nav-right {
-                float: right;
-            }
-
-            .link {
-                text-decoration: none;
-                color: black;
-                font-family: sans-serif;
-                font-size: 10pt;
-            }
-
-            .nav a:hover {
-                text-decoration: underline;
-            }
-
-            .top {
-                margin: 3px;
-            }
-
-        </style>
+        <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
-    <body>
-        <div class="nav">
+    <body class="adv-body">
+        <div class="adv-nav">
             <div class="nav-right">
                 <a class="link" href="index.html">Search</a>
             </div>  
         </div>
-        <div class="top">Find pages with...</div>
-        <div>
+        <div class="desc-border">
+            <div class="desc">Advanced Search</div>
+        </div>
+        <div class="border"></div>
+        <div class="form-border">
+            <div class="top">Find pages with...</div>
             <form action="https://google.com/search">
                 <div class="row"> 
                     <div class="label"><label>all these words:</label></div>
-                    <div class="input"><input type="text" name="q"> </div>
+                    <div class="input"><input class="adv-input" type="text" name="q"> </div>
                 </div>
 
                 <div class="row">
                     <div class="label"><label>this exact word or phrase:</label></div>
-                    <div class="input"><input type="text" name="as_epq"></div>
+                    <div class="input"><input class="adv-input" type="text" name="as_epq"></div>
                 </div>
 
                 <div class="row">
                     <div class="label"><label>any of these words:</label></div>
-                    <div class="input"><input type="text" name="as_oq"></div>
+                    <div class="input"><input class="adv-input" type="text" name="as_oq"></div>
                 </div>
 
                 <div class="row">
                     <div class="label"><label>none of these words:</label></div>
-                    <div class="input"><input type="text" name="as_eq"></div>
+                    <div class="input"><input class="adv-input" type="text" name="as_eq"></div>
                 </div>
 
                 <div class="row">
