@@ -13,8 +13,12 @@ h1 {
 }
 
 textarea {
-    height: 90vh;
+    height: 70vh;
     width: 80%;
+}
+
+.titletext {
+    height: auto;
 }
 
 .main {
@@ -35,4 +39,16 @@ textarea {
 
 .sidebar h2 {
     margin-top: 5px;
+}
+
+.row {
+    margin-right: 0px;
+}
+
+label {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    font-weight: bold;
 }
