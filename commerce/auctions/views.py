@@ -4,11 +4,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Comment
+from .models import User, Listing, Comment, Watchlist
 
 
 def index(request):
-    listings = Listing.objects.all()
+    listings = Listing.objects.filter(active = True)
     return render(request, "auctions/index.html", {
         "listings": listings
     })
@@ -83,3 +83,49 @@ def create(request):
 
     #Loading the page
     return render(request, "auctions/create.html")
+
+def listing(request, list_id):
+
+    listing = Listing.objects.get(id = list_id)
+
+    #TODO Server Side Validation of new bids
+    
+    if request.method == "POST":
+        listing.bids += 1
+        listing.price = request.POST['bid']
+        listing.buyer = request.user
+        listing.save()
+
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })
+
+def close(request, list_id):
+    listing = Listing.objects.get(id = list_id)
+    listing.active = False
+    listing.save()
+
+    return HttpResponseRedirect(reverse("index"))
+
+def watch(request, user_name):
+    newUser = User.objects.get(username = user_name)
+    watching = Watchlist.objects.filter(
+        watch_user = newUser, 
+        item__active = True)
+
+    print("NewUser ID: ", newUser.id)
+    print("Watching: ", watching)
+
+    return render(request, "auctions/watchlist.html", {
+        "listings": watching
+    })
+
+def watch_add(request, user_name, list_id):
+    user = User.objects.get(username = user_name)
+    item = Listing.objects.get(id = list_id)
+    watchlist = Watchlist(watch_user = user, item = item)
+    watchlist.save()
+
+    return HttpResponseRedirect(reverse("watch", kwargs = {
+        "user_name": user.username
+    }))

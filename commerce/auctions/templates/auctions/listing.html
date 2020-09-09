@@ -1,0 +1,59 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h1>{{ listing.name }}</h1>
+<div>
+    {{ listing.description}}
+</div>
+<div>
+    <h2>{{ listing.price }}</h2>
+</div>
+<div>
+    {{ listing.bids }} bids so far.
+
+    {% if user.is_authenticated %}    
+        {% if listing.owner.id == user.id %}
+            This is your listing.
+        {% elif listing.buyer.id == user.id %}
+            You have the highest bid.
+        {% else %}
+            Someone else is winning this auction!
+        {% endif %}
+    {% endif %}
+</div>
+
+{% if user.is_authenticated %}
+    <div>
+        {% if listing.owner.id != user.id %}
+            <form action="{% url 'listing' listing.id %}" method="POST">
+                {% csrf_token %}
+                <input type="number" name="bid" placeholder="bid" min="{{ listing.price }}" step="0.01">
+                <input type="submit" value="Place Bid">
+            </form>
+            <form action="{% url 'watch_add' user.username listing.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Add to Wish List">
+            </form>
+        {% else %}
+            <form action="{% url 'close' listing.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Close Auction">
+            </form>
+        {% endif %}
+    </div>
+{% endif %}
+
+<div>
+    <h2>Details</h2>
+</div>
+<div>
+    Listed by: {{ listing.owner }}
+</div>
+<div>
+    {% if category %}
+        Category: {{listing.category}}
+    {% else %}
+        No category listed
+    {% endif %}
+
+{% endblock %}
