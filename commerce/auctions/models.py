@@ -15,13 +15,23 @@ class Listing(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
     buyer = models.ForeignKey(User, on_delete=models.SET_DEFAULT, related_name="winning", default=None, null=True)
     bids = models.IntegerField(default = 0)
-    active = models.BooleanField(default = True)    
+    active = models.BooleanField(default = True)
+    category = models.CharField(max_length = 64, null=True)
+
+    def __str__(self):
+        return f"{self.name} -- listed by {self.owner.username}"  
 
 class Comment(models.Model):
     comment = models.CharField(max_length = 200)
     leaver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
+    
+    def __str__(self):
+        return f"{self.leaver.username} comment on {self.item.name}"
 
 class Watchlist(models.Model):
     watch_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watching")
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="watched")
+
+    def __str__(self):
+        return f"{self.watch_user.username} watching {self.item.name}"

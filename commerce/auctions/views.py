@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from .models import User, Listing, Comment, Watchlist
 
+category_list = ['home', 'garden', 'sports']
 
 def index(request):
     listings = Listing.objects.filter(active = True)
@@ -65,28 +66,38 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+#Make logged in only?
 def create(request):
     #Getting a new listing
     if request.method == "POST":
         #Test inputs
 
         #Create new listing
+
         item = Listing(
             name = request.POST['name'],
             description = request.POST['description'],
             price = request.POST['price'],
             owner = request.user
         )
+
+        #Add optional category if specified by user
+        if request.POST['category'] != 'None':
+            item.category = request.POST['category']
+
         item.save()
 
         return HttpResponseRedirect(reverse("index"))
 
-    #Loading the page
-    return render(request, "auctions/create.html")
+    #Loading the page, 
+    return render(request, "auctions/create.html", {
+        "categories": category_list
+    })
 
 def listing(request, list_id):
 
     listing = Listing.objects.get(id = list_id)
+    comments = Comment.objects.filter(item__id = list_id)
 
     #TODO Server Side Validation of new bids
     
@@ -94,10 +105,11 @@ def listing(request, list_id):
         listing.bids += 1
         listing.price = request.POST['bid']
         listing.buyer = request.user
-        listing.save()
+        listing.save()     
 
     return render(request, "auctions/listing.html", {
-        "listing": listing
+        "listing": listing,
+        "comments": comments
     })
 
 def close(request, list_id):
@@ -129,3 +141,36 @@ def watch_add(request, user_name, list_id):
     return HttpResponseRedirect(reverse("watch", kwargs = {
         "user_name": user.username
     }))
+
+def comment(request, list_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(id = list_id)
+        user = request.user
+        left_comment = request.POST["comment"]
+
+        newComment = Comment(comment = left_comment, leaver = user, item = listing)
+        newComment.save()
+
+    return HttpResponseRedirect(reverse("listing", kwargs = {
+        "list_id": list_id
+    }))
+
+def categories(request):
+    if request.method == "POST":
+        
+        if request.POST['category'] == "None":
+            listings = Listing.objects.filter(active = True)
+        else:
+            listings = Listing.objects.filter(category = request.POST['category'])
+
+        return render(request, "auctions/categories.html", {
+            "categories": category_list,
+            "listings": listings
+        })
+
+    listings = Listing.objects.filter(active = True)
+
+    return render(request, "auctions/categories.html", {
+        "categories": category_list,
+        "listings": listings
+    })
