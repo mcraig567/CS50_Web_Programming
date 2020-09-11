@@ -1,50 +1,71 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h1>{{ listing.name }}</h1>
+<h1>Listing: {{ listing.name }}</h1>
+{% if user.is_authenticated %}
+    <form action="{% url 'watch_add' user.username listing.id %}" method="POST">
+        {% csrf_token %}
+        {% if wish == True %}
+            <input class="watchlist-on" type="submit" value="Watchist">
+        {% else %}
+        <input class="watchlist-off" type="submit" value="Watchlist">
+        {% endif %}
+    </form>
+{% endif %}
+<div>
+    <img src="{{ listing.image }}" alt="Listing Image">
+</div>
 <div>
     {{ listing.description}}
 </div>
 <div>
-    <h2>{{ listing.price }}</h2>
+    <h2>${{ listing.price }}</h2>
 </div>
 <div>
     {{ listing.bids }} bid(s) so far.
 
-    {% if user.is_authenticated %}    
-        {% if listing.owner.id == user.id %}
-            This is your listing.
-        {% elif listing.buyer.id == user.id %}
-            You have the highest bid.
-        {% else %}
-            {% if listing.bids == 0 %}
-                Be the first to bid on this item!
+    {% if listing.active == True %}
+        {% if user.is_authenticated %}    
+            {% if listing.owner.id == user.id %}
+                This is your listing.
+
+            {% elif listing.buyer.id == user.id %}
+                You have the highest bid.
+
             {% else %}
-                Someone else is winning this auction!
+                {% if listing.bids == 0 %}
+                    Be the first to bid on this item!
+
+                {% else %}
+                    Someone else is winning this auction!
+                    
+                {% endif %}
             {% endif %}
         {% endif %}
+
+    {% else %}
+        This auction is over! {{ listing.buyer }} has won!
+
     {% endif %}
 </div>
 
-{% if user.is_authenticated %}
-    <div>
-        {% if listing.owner.id != user.id %}
-            <form action="{% url 'listing' listing.id %}" method="POST">
-                {% csrf_token %}
-                <input type="number" name="bid" placeholder="bid" min="{{ listing.price }}" step="0.01">
-                <input type="submit" value="Place Bid">
-            </form>
-            <form action="{% url 'watch_add' user.username listing.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Add to Wish List">
-            </form>
-        {% else %}
-            <form action="{% url 'close' listing.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Close Auction">
-            </form>
-        {% endif %}
-    </div>
+{% if listing.active == True %}
+    {% if user.is_authenticated %}
+        <div>
+            {% if listing.owner.id != user.id %}
+                <form action="{% url 'listing' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="number" name="bid" placeholder="bid" min="{{ listing.price }}" step="0.01">
+                    <input type="submit" value="Place Bid">
+                </form>
+            {% else %}
+                <form action="{% url 'close' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Close Auction">
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endif %}
 
 <div>
@@ -62,10 +83,14 @@
 </div>
 <div>
     <h2>Comments</h2>
-    <ul>
+    <ul class="comment">
         {% for comment in comments %}
-            <li>{{ comment.comment }}</li>
-
+        <li>
+            <ul class="comment-list">
+                <li class="comment-comment">{{ comment.comment }}</li>
+                <li class="comment-leaver">Posted by: {{ comment.leaver }}</li>
+            </ul>
+        </li>
         {% empty %}
             Be the first to add a comment
     
@@ -73,9 +98,9 @@
     </ul>
 </div>
 <div>
-    <form action="{% url 'comment' listing.id %}" method="POST">
+    <form class="comment-form" action="{% url 'comment' listing.id %}" method="POST">
         {% csrf_token %}
-        <textarea name="comment" rows="4" cols="50">Add comment</textarea>
+        <textarea name="comment" rows="4" cols="50" placeholder="Add Comment"></textarea>
         <input type="submit" value="Add Comment">
     </form>
 </div>

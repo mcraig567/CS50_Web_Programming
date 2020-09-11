@@ -32,8 +32,12 @@
                     <a class="nav-link" href="{% url 'watch' user.username %}">Watchlist</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'closed' %}">Closed Listings</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                 </li>
+                
                 
             {% else %}
                 <li class="nav-item">

@@ -2,7 +2,7 @@ body {
     padding: 10px;
 }
 
-.add-form {
+.add-form, .listing-outer {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -27,4 +27,71 @@ body {
 .add-form li button {
     margin-left: 658px;
     border-radius: 2px;
+}
+
+.listing-inner {
+    border: 1px gray solid;
+    border-radius: 5px;
+    list-style-type: none;
+    margin: 5px 0;
+    padding: 0;
+    display: flex;
+}
+
+.listing-inner > div > img {
+    max-width: 300px;
+    max-height: 400px;
+    margin-right: 8px; 
+}
+
+.link {
+    color: black;
+}
+
+.watchlist-on, .watchlist-off {
+    font-size: 8px;
+}
+
+.watchlist-on {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+.comment {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-width: 500px;
+    border: 1px gray solid;
+    border-radius: 5px;
+}
+
+.comment-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 3px;
+}
+
+.comment-leaver {
+    font-size: 0.6rem;
+    background-color: #EFEFEF
+}
+
+.comment-form {
+   display: flex;
+   flex-direction: column;
+}
+
+.comment-form textarea {
+    flex: 0 1 150px;
+    max-width: 500px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.comment-form input {
+    max-width: 150px;
+    margin-bottom: 20px;
+    border-radius: 5px;
 }

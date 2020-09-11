@@ -71,9 +71,9 @@ def create(request):
     #Getting a new listing
     if request.method == "POST":
         #Test inputs
+        #Need to ensure that URL is valid
 
-        #Create new listing
-
+        #Save new listing
         item = Listing(
             name = request.POST['name'],
             description = request.POST['description'],
@@ -84,6 +84,10 @@ def create(request):
         #Add optional category if specified by user
         if request.POST['category'] != 'None':
             item.category = request.POST['category']
+
+        #Add image if specified by user
+        if request.POST['image'] != "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg":
+            item.image = request.POST['image']
 
         item.save()
 
@@ -107,9 +111,25 @@ def listing(request, list_id):
         listing.buyer = request.user
         listing.save()     
 
+
+    wishlists = Watchlist.objects.filter(
+        watch_user = request.user,
+        item = listing
+    )
+
+    print(wishlists)
+    print("Length: ", len(wishlists))
+
+    if len(wishlists) == 0:
+        wish = False
+    else:
+        wish = True
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
-        "comments": comments
+        "comments": comments,
+        "wish": wish,
+        "active": listing.active
     })
 
 def close(request, list_id):
@@ -120,10 +140,9 @@ def close(request, list_id):
     return HttpResponseRedirect(reverse("index"))
 
 def watch(request, user_name):
+
     newUser = User.objects.get(username = user_name)
-    watching = Watchlist.objects.filter(
-        watch_user = newUser, 
-        item__active = True)
+    watching = Watchlist.objects.filter(watch_user = newUser)
 
     print("NewUser ID: ", newUser.id)
     print("Watching: ", watching)
@@ -135,8 +154,18 @@ def watch(request, user_name):
 def watch_add(request, user_name, list_id):
     user = User.objects.get(username = user_name)
     item = Listing.objects.get(id = list_id)
-    watchlist = Watchlist(watch_user = user, item = item)
-    watchlist.save()
+
+    watchCheck = Watchlist.objects.filter(
+        watch_user = user,
+        item = item
+    )
+
+    if len(watchCheck) == 0:
+        watchlist = Watchlist(watch_user = user, item = item)
+        watchlist.save()
+
+    else:
+        watchCheck.delete()
 
     return HttpResponseRedirect(reverse("watch", kwargs = {
         "user_name": user.username
@@ -172,5 +201,11 @@ def categories(request):
 
     return render(request, "auctions/categories.html", {
         "categories": category_list,
+        "listings": listings
+    })
+
+def closed(request):
+    listings = Listing.objects.filter(active = False)
+    return render(request, "auctions/index.html", {
         "listings": listings
     })

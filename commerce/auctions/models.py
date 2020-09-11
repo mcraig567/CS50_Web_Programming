@@ -17,6 +17,7 @@ class Listing(models.Model):
     bids = models.IntegerField(default = 0)
     active = models.BooleanField(default = True)
     category = models.CharField(max_length = 64, null=True)
+    image = models.URLField(default="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg")
 
     def __str__(self):
         return f"{self.name} -- listed by {self.owner.username}"  

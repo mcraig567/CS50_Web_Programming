@@ -2,9 +2,26 @@
 
 {% block body %}
     <h2>Watchlist</h2>
-    <ul>
-    {% for listing in listings %}
-        <li><a href="{% url 'listing' listing.item.id %}">{{ listing.item.name }}</a></li>
-    {% endfor %}
-    </ul>
+    <ul class="listing-outer">
+        {% for listing in listings %}
+            <li>
+                <ul class="listing-inner">
+                    <div>
+                        <img src="{{ listing.item.image }}" alt="Picture of Listing">
+                    </div>
+                    <div>
+                        {% if listing.item.active == True %}
+                            <h2><a class="link" href="{% url 'listing' listing.item.id %}">{{ listing.item.name }}</a></h2>
+                        {% else %}
+                            <h2><a class="link" href="{% url 'listing' listing.item.id %}">{{ listing.item.name }} - CLOSED</a></h2>    
+                        {% endif %}
+
+                        <li>${{ listing.item.price }}</li>
+                        <li>{{ listing.item.description }}</li>
+                        <li>Posted by: {{ listing.item.owner }}</li>
+                    </div>
+                </ul>
+            </li>            
+        {% endfor %}
+        </ul>
 {% endblock %}
