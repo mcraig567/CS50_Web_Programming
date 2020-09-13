@@ -13,7 +13,7 @@
     </form>
 {% endif %}
 <div>
-    <img src="{{ listing.image }}" alt="Listing Image">
+    <img class="list-img" src="{{ listing.image }}" alt="Listing Image">
 </div>
 <div>
     {{ listing.description}}
@@ -44,14 +44,27 @@
         {% endif %}
 
     {% else %}
-        This auction is over! {{ listing.buyer }} has won!
+        {% if user.is_authenticated %}
+            {% if listing.buyer.id == user.id %}
+                This auction is over! You have won!
+            {% else %}
+                This auction is over! Someone else won.
+            {% endif %}
 
+        {% else %}
+            This auction is over! Someone else won.
+
+        {% endif %}
     {% endif %}
 </div>
 
 {% if listing.active == True %}
     {% if user.is_authenticated %}
         <div>
+            {% if message %}
+                {{ message }}
+            {% endif %}
+
             {% if listing.owner.id != user.id %}
                 <form action="{% url 'listing' listing.id %}" method="POST">
                     {% csrf_token %}
@@ -91,19 +104,21 @@
                 <li class="comment-leaver">Posted by: {{ comment.leaver }}</li>
             </ul>
         </li>
-        {% empty %}
-            Be the first to add a comment
     
         {% endfor %}
     </ul>
 </div>
-<div>
-    <form class="comment-form" action="{% url 'comment' listing.id %}" method="POST">
-        {% csrf_token %}
-        <textarea name="comment" rows="4" cols="50" placeholder="Add Comment"></textarea>
-        <input type="submit" value="Add Comment">
-    </form>
-</div>
+{% if user.is_authenticated %}
+    <div>
+        <form class="comment-form" action="{% url 'comment' listing.id %}" method="POST">
+            {% csrf_token %}
+            <textarea name="comment" rows="4" cols="50" placeholder="Add Comment"></textarea>
+            <input type="submit" value="Add Comment">
+        </form>
+    </div>
+{% else %}
+    <a href="{% url 'login' %}">Login</a> to add a comment
+{% endif %}
 
 
 {% endblock %}

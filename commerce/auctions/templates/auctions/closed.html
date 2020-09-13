@@ -1,23 +1,8 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-{% if message %}
-    {{ message }}
-{% endif %}
-<form action="{% url 'categories' %}" method="POST">
-    {% csrf_token %}
-    <select name="category">
-            <option value="None">None</option>
-        {% for category in categories %}
-            <option value="{{ category }}">{{ category }}</option>
-        {% endfor %}    
-    </select>
-    <input type="submit" value="Pick a Category">
-</form>
-
-<h2>Listings</h2>
-
-<ul class="listing-outer">
+    <h2>Closed Listings</h2>
+    <ul class="listing-outer">
     {% for listing in listings %}
         <li>
             <ul class="listing-inner">
@@ -31,11 +16,7 @@
                     <li>Posted by: {{ listing.owner }}</li>
                 </div>
             </ul>
-        </li>   
-        
-    {% empty %}
-        There are no listings in this category
+        </li>            
     {% endfor %}
     </ul>
-
 {% endblock %}

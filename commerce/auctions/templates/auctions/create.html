@@ -3,6 +3,10 @@
 {% block body %}
 <h2>Create New Listing</h2>
 
+{% if message %}
+    {{ message }}
+{% endif %}
+
 <form action="{% url 'create' %}" method="POST" class="add-form">
     {% csrf_token %}
     <ul class="add-form">

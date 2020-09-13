@@ -44,6 +44,11 @@ body {
     margin-right: 8px; 
 }
 
+.list-img {
+    max-width: 300px;
+    max-height: 400px;
+}
+
 .link {
     color: black;
 }
