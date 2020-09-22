@@ -14,12 +14,16 @@ textarea {
     width: 25%;
     padding: 3px;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .email-body {
     width: 50%;
     text-align: left;
     padding: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .indiv-email {

@@ -63,8 +63,18 @@ function load_mailbox(mailbox) {
   document.querySelector('#indiv-email').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
-  // Clear any existing onclick items on archive
-  document.querySelector('#archive').removeEventListener('click', archive);
+  // Clear any existing onclick items on archive - replace old button with new one
+  let oldArchive = document.querySelector('#archive');
+  let newArchive = oldArchive.cloneNode();
+  let buttons = document.querySelector("#buttons");
+
+  newArchive.setAttribute("id", "new");
+
+  oldArchive.remove();
+
+  // Rename new archive button for next load_mailbox call
+  newArchive.setAttribute("id", "archive");
+  buttons.append(newArchive);
 
   //Do not show the reply button if in sent folder
   if(mailbox === 'sent') {
@@ -174,12 +184,15 @@ function load_email(email) {
 
   //Add functionality to Reply and Archive Buttons
   document.querySelector('#reply').addEventListener('click', () => reply_email(email));
-  
-  document.querySelector('#archive').addEventListener('click', function archive() {
-    console.log("adding event listener for email ", email.id);
-    document.querySelector('#archive').removeEventListener('click', archive);
-    archive_email(email);
-  });
+  document.querySelector('#archive').addEventListener('click', () => archive_email(email));
+
+  // Previous Event Listener which added and removed the Event Listener when the button was clicked
+
+  // document.querySelector('#archive').addEventListener('click', function archive() {
+  //  console.log("adding event listener for email ", email.id);
+  //   document.querySelector('#archive').removeEventListener('click', archive);
+  //  archive_email(email);
+  //});
 }
 
 function reply_email(email) {
@@ -189,9 +202,17 @@ function reply_email(email) {
   document.querySelector('#indiv-email').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
-  // Clear out composition fields
+  // Autofill composition fields
   document.querySelector('#compose-recipients').value = `${email.sender}`;
-  document.querySelector('#compose-subject').value = `RE: ${email.subject}`;
+
+  console.log("Substring: ", email.subject.substring(0,3));
+  
+  if (email.subject.substring(0,3) === "RE:") {
+    document.querySelector('#compose-subject').value = `${email.subject}`;
+  } else {
+    document.querySelector('#compose-subject').value = `RE: ${email.subject}`;
+  };
+
   document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote: ${email.body}`;
 }
 
